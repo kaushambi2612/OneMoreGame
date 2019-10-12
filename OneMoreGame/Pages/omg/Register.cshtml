@@ -1,0 +1,158 @@
+﻿@page
+@using OneMoreGame.Models
+@model OneMoreGame.Pages.omg.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<br />
+<h2 class="text-info">Register New Player</h2>
+<br />
+<div class="border">
+    <form method="POST" action="">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="container" style="padding: 30px">
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label asp-for="Player.Name"></label>
+                    </div>
+                    <div class="col-sm-4">
+                        <input asp-for="Player.Name" class="form-control" />
+                        <span asp-validation-for="Player.Name" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                         <label asp-for="Player.Email"></label>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="email" asp-for="Player.Email" class="form-control" />
+                        <span asp-validation-for="Player.Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label asp-for="Player.Phone"></label>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="number" asp-for="Player.Phone" class="form-control" />
+                        <span asp-validation-for="Player.Phone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label asp-for="Player.Fifa20"></label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="checkbox" asp-for="Player.Fifa20" onclick="myFunction(this, 0)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label asp-for="Player.Tekken"></label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="checkbox" asp-for="Player.Tekken" onclick="myFunction(this, 1)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label asp-for="Player.PubG"></label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="checkbox" asp-for="Player.PubG" onclick="myFunction(this, 2)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label asp-for="Player.Total"></label>
+                    </div>
+                    <div class="col-sm-4">
+                        <input asp-for="Player.Total" class="form-control" id="total-amount" readonly="@true" />
+                        <span class="form-control d-none" id="contact"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label asp-for="Player.SelectedPaymentMethod"></label>
+                    </div>
+                    <div class="col-sm-4">
+                        @foreach (var paymentMethod in Model.PaymentMethods)
+                        {
+                            <input type="radio" asp-for="Player.SelectedPaymentMethod" value="@paymentMethod" onClick="displayPaymentContact(this)"/> @paymentMethod<br />
+                        }
+                        <span asp-validation-for="Player.SelectedPaymentMethod" class="text-danger"></span>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-2 offset-sm-2">
+                        <input type="submit" value="Register" class="btn btn-primary form-control mb-1" />
+                    </div>
+                    <div class="col-sm-2">
+                        <a asp-page="Players" class="btn btn-success form-control mb-1">Back To List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var entryFee = [200, 100, 150];
+    var price = parseInt(document.getElementById('total-amount').value) || 0;
+
+    function myFunction(el, i) {
+        if (el.checked) {
+            price += entryFee[i];
+        }
+        else
+        if (price - entryFee[i] >= 0) {
+            price -= entryFee[i];
+        }
+        document.getElementById('total-amount').value = price;
+    }
+</script>
+<script>
+    var contact = "Send money to: 9557788114";
+
+    function displayPaymentContact(el) {
+        if (el.value !== "Cash") {
+            document.getElementById('contact').innerHTML = contact;
+            if (document.getElementById('contact').classList)
+                document.getElementById('contact').classList.remove('d-none');
+        }
+        else {
+            document.getElementById('contact').classList.add('d-none');
+        }
+    }
+</script>
+@section scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

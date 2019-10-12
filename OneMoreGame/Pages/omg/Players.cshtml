@@ -1,0 +1,110 @@
+﻿@page
+@using Microsoft.EntityFrameworkCore.Internal
+@model OneMoreGame.Pages.omg.PlayersModel
+@{
+    ViewData["Title"] = "Players";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="text-info">Registered Player List</h2>
+        </div>
+        <div class="col-md-6 text-right">
+            <a asp-page="Register" class="btn btn-primary">Register New Player</a>
+        </div>
+    </div>
+</div>
+
+@if (Model.Message != null)
+{
+    <div class="alert alert-info alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @Model.Message
+    </div>
+}
+
+
+<form method="Post">
+    @{
+        if (Model.Players.Count() > 0)
+        {
+            <br />
+            <br />
+            <table class="table table-striped border">
+                @*Headings*@
+                <tr class="table-secondary">
+                    <th>
+                        @Html.DisplayNameFor(m => m.Players.FirstOrDefault().Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Players.FirstOrDefault().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Players.FirstOrDefault().Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Players.FirstOrDefault().Fifa20)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Players.FirstOrDefault().Tekken)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Players.FirstOrDefault().PubG)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Players.FirstOrDefault().SelectedPaymentMethod)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.Players)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Fifa20)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Tekken)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.PubG)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.SelectedPaymentMethod)
+                        </td>
+                        <td>
+                            <button asp-page-handler="Delete" asp-route-id="@item.Id" 
+                                    onClick="return confirm('Are you sure you want to delete this player?');"
+                                    class="btn btn-danger btn-sm">Delete</button>
+                            <a asp-route-id="@item.Id" asp-page="Edit" class="btn btn-success btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>No players have registered for the tournament yet.</p>
+        }
+    }
+
+    <br />
+    <div class="container">
+
+        <div class="d-flex">
+            <label>Total registrations:</label>
+            <label class="offset-1">@Model.Players.Count()</label>
+        </div>
+
+    </div>
+</form>

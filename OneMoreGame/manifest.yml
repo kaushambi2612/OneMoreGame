@@ -1,0 +1,6 @@
+applications:
+- name: onemoregame
+  disk_quota: 536M
+  memory: 1g
+  services:
+  - OMGElephantSQL
